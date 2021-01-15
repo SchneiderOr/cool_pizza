@@ -9,6 +9,7 @@ import FallingRaindrops from "modules/raindrops/fallingRaindrops";
 import EditableWeights from "modules/editableForm/editableWeights";
 
 import "./App.css";
+import { ALGORITHEM_DEFAULTS } from "config/constants";
 
 const SpeedoMeterContainer = styled.div`
   display: flex;
@@ -44,11 +45,10 @@ const AppWrapper = styled.div`
   ${getBGColorGradientByTime};
 `;
 
-const Info = styled.div`
+const InfoPanel = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-top: 50px;
   align-items: center;
   white-space: pre;
   font-size: 20px;
@@ -76,39 +76,30 @@ const Percentage = styled.div`
   }
 `;
 
-const fieldsDescriptor = {
-  probabiltyOfSolveInHour: 0.75, // lets keep the probabilty 75%
-  currentIssues: 5, // single issue
-  workers: 2, // one worker - shouldnt affect result
-  hoursLeft: 1, // many hours for resolving it
-};
-
 function App() {
   const [currentHour] = useState(new Date().getHours());
-
-  const [currentDescriptor, setCurrentDescriptor] = useState(fieldsDescriptor);
-  const [currentChance, setCurrentChance] = useState();
+  const [currentDescriptor, setCurrentDescriptor] = useState(
+    ALGORITHEM_DEFAULTS
+  );
+  const [currentChance, setCurrentChance] = useState(0);
 
   useEffect(() => {
-    // const es = getEstimatedPercentageToOrderPizza(currentDescriptor);
-    // setCurrentChance(es);
-  }, [currentDescriptor, currentHour]);
-  console.log(currentDescriptor.currentIssues);
+    setCurrentChance(getEstimatedPercentageToOrderPizza(currentDescriptor));
+  }, [currentDescriptor]);
+
   return (
     <AppWrapper currentHour={currentHour} className="App">
-      <div style={{ position: "absolute" }}>
-        <FallingRaindrops
-          isRandomPosition
-          isRandomScaleFactor
-          count={currentDescriptor.currentIssues}
-        />
-      </div>
-      <Info>
+      <InfoPanel>
         <EditableWeights
-          fieldsDescriptor={fieldsDescriptor}
+          fieldsDescriptor={currentDescriptor}
           onSubmitNewValues={setCurrentDescriptor}
         />
-      </Info>
+      </InfoPanel>
+
+      <FallingRaindrops
+        isRandomScaleFactor
+        count={currentDescriptor.currentIssues}
+      />
 
       <SpeedoMeterContainer>
         <Percentage>{currentChance}</Percentage>

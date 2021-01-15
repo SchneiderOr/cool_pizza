@@ -1,3 +1,4 @@
+import { keys, memoize, shuffle } from "lodash";
 import { css } from "styled-components";
 const Parser = require("expr-eval").Parser;
 
@@ -144,16 +145,19 @@ export const getBGColorGradientByTime = ({ currentHour }) => {
 };
 
 /* Create 2 uniqe sets based on the count in order to show nicely the raindrops on different positions randomaly */
+let nums = new Set();
 export const generateUniqePositionsArray = ({ count, maxRange = 100 }) => {
-  const nums = new Set();
   while (nums.size !== count) {
     nums.add(Math.floor(Math.random() * maxRange) + 1);
   }
+  console.log(nums);
   return [...nums];
 };
 
-export const getRandomFloatBetweenRange = ({ min, max }) =>
-  Math.random() * (max - min) + min; // get random number between min & max scale
+export const getRandomFloatBetweenRange = memoize(
+  ({ min, max }) => Math.random() * (max - min) + min,
+  () => true
+);
 
 export const getEstimatedPercentageToOrderPizza = ({
   probabiltyOfSolveInHour = 1,
@@ -166,22 +170,30 @@ export const getEstimatedPercentageToOrderPizza = ({
     `(1 - probabiltyOfSolveInHour ^ (currentIssues / (workers * hoursLeft))) * 100`
   );
 
-  console.log(p);
-  return p.evaluate({
-    probabiltyOfSolveInHour,
-    currentIssues,
-    workers,
-    hoursLeft,
-  });
-  return (
-    1 - probabiltyOfSolveInHour ** (currentIssues / (workers * hoursLeft)) * 100
-    // 1 - probabiltyOfSolveInHour ** (currentIssues / (workers * hoursLeft)) * 100
+  return Math.round(
+    p.evaluate({
+      probabiltyOfSolveInHour,
+      currentIssues,
+      workers,
+      hoursLeft,
+    })
   );
+  // return (
+  //   1 - probabiltyOfSolveInHour ** (currentIssues / (workers * hoursLeft)) * 100
+  //   // 1 - probabiltyOfSolveInHour ** (currentIssues / (workers * hoursLeft)) * 100
+  // );
 
-  return Math.pow(
-    probabiltyOfSolveInHour,
-    currentIssues / (workers * hoursLeft)
-  );
+  // return Math.pow(
+  //   probabiltyOfSolveInHour,
+  //   currentIssues / (workers * hoursLeft)
+  // );
 };
 
-window.getEstimatedPercentageToOrderPizza = getEstimatedPercentageToOrderPizza;
+// This is using React.useMemo meaning that this will be calculated only once, or only if the count is bigger then the one passed
+export const getRandomPositionAndScale = memoize(() => {
+  return {
+    top: shuffle(keys([...Array(100)])),
+    left: shuffle(keys([...Array(100)])),
+    scale: [...Array(99)].map(() => Math.random() * (1.5 - 0.5) + 0.5),
+  };
+});

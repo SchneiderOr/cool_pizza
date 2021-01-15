@@ -1,16 +1,7 @@
 import styled from "styled-components";
-import { getRandomFloatBetweenRange } from "utils";
 
-const Raindrop = styled.span.attrs((props) => {
-  const { isRandomScaleFactor, minScale = 0.5, maxScale = 1.5 } = props;
-  const style = {};
-  if (isRandomScaleFactor) {
-    const scaleFactor = getRandomFloatBetweenRange({
-      min: minScale,
-      max: maxScale,
-    });
-    style.transform = `scale(${scaleFactor})`;
-  }
+const Raindrop = styled.span.attrs(({ randomScaleFactor }) => {
+  const style = { transform: `scale(${randomScaleFactor})` };
   return { style };
 })`
   position: absolute;

@@ -6,21 +6,24 @@ import Fader from "basicCompnents/Fader/fader";
 
 const raindropFall = keyframes`
 from {
-  transform:translateY(0);
+  transform: translateY(0);
 } 
 to {
-  transform:translateY(200px);
+  transform: translateY(200px);
   }
 `;
 
 const RaindropWrapper = styled.div.attrs((props) => {
   const { positionDescriptor, index } = props;
   const { top, left } = positionDescriptor;
-  const style = { top: `${top[index]}vh`, left: `${left[index]}vw` };
+  const style = {
+    top: `calc(${top[index]}vh - 200px)`,
+    left: `${left[index]}vw`,
+  };
   return { style };
 })`
   position: absolute;
-  animation: ${raindropFall} 30s 3s linear forwards;
+  animation: ${raindropFall} 30s 1s linear forwards;
 `;
 
 const FallingRaindrops = ({

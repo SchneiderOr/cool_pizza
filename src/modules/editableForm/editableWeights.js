@@ -1,6 +1,13 @@
 import styled, { css } from "styled-components";
 import { useRef, useState } from "react";
 
+const hours = new Date().getHours();
+const isDayTime = hours > 6 && hours < 20;
+
+const colors = {
+  white: "255, 255, 255",
+  black: "0, 0, 0",
+};
 const Wrapper = styled.div`
   position: absolute;
   ${({ isVisible }) =>
@@ -12,7 +19,7 @@ const Wrapper = styled.div`
   height: 200px;
   flex-direction: column;
   user-select: none;
-  transition: transform 1.5s ease;
+  transition: transform 1s cubic-bezier(0.9, 1.8, 0.21, 0.8);
   @media only screen and (max-width: 767px) {
     padding: 20px;
     ${({ isVisible }) =>
@@ -29,17 +36,31 @@ const EditableFormContainer = styled.div`
 `;
 
 const fieldAndButtonStyle = css`
-  background: rgba(0, 0, 0, 0.25);
-  border: 1px solid rgba(0, 0, 0, 0.5);
+  background: rgba(
+    ${isDayTime ? colors.black : colors.white},
+    ${isDayTime ? 0.25 : 0.125}
+  );
+  border: 1px solid
+    rgba(
+      ${isDayTime ? colors.black : colors.white},
+      ${isDayTime ? 0.25 : 0.125}
+    );
   color: white;
   padding: 10px;
   outline: none;
-  transition: all 0.25s linear;
+  transition: all 0.25s cubic-bezier(0.8, 0.2, 1, 1.2);
 
   &:hover,
   &:focus {
-    background: rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(0, 0, 0, 0.75);
+    background: rgba(
+      ${isDayTime ? colors.black : colors.white},
+      ${isDayTime ? 0.5 : 0.25}
+    );
+    border: 1px solid
+      rgba(
+        ${isDayTime ? colors.black : colors.white},
+        ${isDayTime ? 0.25 : 0.25}
+      );
   }
 `;
 
@@ -70,7 +91,28 @@ const Button = styled.button`
   ${fieldAndButtonStyle};
   margin-bottom: 10px;
   cursor: pointer;
+  &:focus {
+    background: rgba(
+      ${isDayTime ? colors.black : colors.white},
+      ${isDayTime ? 0.5 : 0.75}
+    );
+    border: 1px solid
+      rgba(
+        ${isDayTime ? colors.black : colors.white},
+        ${isDayTime ? 0.125 : 0.25}
+      );
+  }
+  font-weight: bold;
+  &:hover {
+    color: rgba(${isDayTime ? colors.white : colors.black}, 1);
+    background: rgba(
+      ${isDayTime ? colors.black : colors.white},
+      ${isDayTime ? 0.25 : 0.75}
+    );
+    border-color: rgba(${isDayTime ? colors.black : colors.white}, 0.75);
+  }
 `;
+
 const MenuButton = styled.button`
   ${fieldAndButtonStyle};
   align-items: center;
@@ -79,11 +121,33 @@ const MenuButton = styled.button`
   align-self: center;
   height: 25px;
   border-radius: 50px;
-  background: rgba(0, 0, 0, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(
+    ${isDayTime ? colors.black : colors.white},
+    ${isDayTime ? 0.5 : 0.75}
+  );
+  border: 1px solid
+    rgba(
+      ${isDayTime ? colors.black : colors.white},
+      ${isDayTime ? 0.125 : 0.25}
+    );
   cursor: pointer;
+  &:focus {
+    background: rgba(
+      ${isDayTime ? colors.black : colors.white},
+      ${isDayTime ? 0.5 : 0.75}
+    );
+    border: 1px solid
+      rgba(
+        ${isDayTime ? colors.black : colors.white},
+        ${isDayTime ? 0.125 : 0.25}
+      );
+  }
   &:hover {
-    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(
+      ${isDayTime ? colors.black : colors.white},
+      ${isDayTime ? 0.25 : 0.5}
+    );
+    border-color: rgba(${isDayTime ? colors.black : colors.white}, 0.5);
   }
 
   &:before {
@@ -93,7 +157,7 @@ const MenuButton = styled.button`
     justify-content: center;
     display: flex;
     border-radius: 20px;
-    background: rgba(0, 0, 0, 0.75);
+    /* background: rgba(${isDayTime ? colors.black : colors.white}, 0.75); */
     width: 25px;
     height: 15px;
     color: white;
@@ -102,7 +166,7 @@ const MenuButton = styled.button`
   img {
     width: 25px;
     height: 15px;
-    filter: brightness(1);
+    filter: brightness(${isDayTime ? colors.black : colors.white});
     transition: transform 0.5s 0.5s linear;
     ${({ isVisible }) =>
       css`

@@ -30,6 +30,9 @@ to {
 const AppWrapper = styled.div`
   position: relative;
   overflow: hidden;
+  text-align: center;
+  display: flex;
+  overflow: hidden;
   /* &:after {
     display: flex;
     content: "";
@@ -51,7 +54,6 @@ const InfoPanel = styled.div`
   width: 100%;
   align-items: center;
   white-space: pre;
-  font-size: 20px;
   color: white;
 `;
 
@@ -89,11 +91,32 @@ const Formula = styled.span`
   position: absolute;
   top: 200px;
   width: 100%;
-  line-height: 24px;
+
+  line-height: 20px;
+  font-size: 16px;
   margin: 0 auto;
   color: rgba(255, 255, 255, 0.5);
+
+  code {
+    white-space: nowrap;
+  }
+
   @media only screen and (max-width: 767px) {
+    code {
+      white-space: pre-line;
+    }
     top: 250px;
+  }
+
+  @media only screen and (max-width: 500px) {
+    line-height: 16px;
+    font-size: 12px;
+    top: 60%;
+
+    letter-spacing: 1px;
+    code {
+      white-space: pre-line;
+    }
   }
 `;
 
@@ -111,8 +134,13 @@ function App() {
   return (
     <AppWrapper currentHour={currentHour} className="App">
       <Formula>
-        Using formula: <br /> `(1 - probabiltyOfSolveInHour ^ (currentIssues /
-        (workers * hoursLeft))) * 100`
+        Using formula: <br />
+        <pre>
+          <code>
+            {`(1 - probabiltyOfSolveInHour ^ (currentIssues / (workers *
+            hoursLeft))) * 100`}
+          </code>
+        </pre>
       </Formula>
       <InfoPanel>
         <EditableWeights

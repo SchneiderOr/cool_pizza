@@ -201,6 +201,9 @@ const EditableWeights = ({
                 key={key}
                 ref={(ref) => (formRefs[key] = ref)}
                 type="text"
+                step="0.1"
+                min="0"
+                max="100"
                 name={key}
                 defaultValue={fieldsDescriptor[key]}
                 autoComplete="off"

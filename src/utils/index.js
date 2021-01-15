@@ -170,13 +170,16 @@ export const getEstimatedPercentageToOrderPizza = ({
     `(1 - probabiltyOfSolveInHour ^ (currentIssues / (workers * hoursLeft))) * 100`
   );
 
-  return Math.round(
-    p.evaluate({
-      probabiltyOfSolveInHour,
-      currentIssues,
-      workers,
-      hoursLeft,
-    })
+  return Math.max(
+    0,
+    Math.round(
+      p.evaluate({
+        probabiltyOfSolveInHour,
+        currentIssues,
+        workers,
+        hoursLeft,
+      })
+    )
   );
   // return (
   //   1 - probabiltyOfSolveInHour ** (currentIssues / (workers * hoursLeft)) * 100

@@ -48,7 +48,7 @@ const View = styled.div`
   flex-direction: column;
   flex: 1 1 25%;
   @media only screen and (max-width: 767px) {
-    flex: 1 1 100%;
+    flex: 1 1 50%;
   }
 `;
 

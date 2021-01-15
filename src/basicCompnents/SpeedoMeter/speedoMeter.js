@@ -56,10 +56,27 @@ const Needle = styled.div`
   }
 `;
 
+const Circle = styled.span`
+  position: absolute;
+  left: calc(50% - 0.75vw);
+  bottom: -0.5vw;
+  width: 1.5vw;
+  height: 1.5vw;
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 50%;
+  filter: drop-shadow(0px 0 3px rgba(0, 0, 0, 0.5));
+  @media only screen and (max-width: 767px) {
+    left: calc(50% - 0.75vw);
+    bottom: -1vw;
+    width: 2.5vw;
+    height: 2.5vw;
+  }
+`;
 const SpeedoMeter = ({ percentage }) => {
   return (
     <SpeedoMeterWrapper>
       <Needle percentage={percentage} />
+      <Circle />
     </SpeedoMeterWrapper>
   );
 };

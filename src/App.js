@@ -57,22 +57,42 @@ const InfoPanel = styled.div`
 
 const Percentage = styled.div`
   position: absolute;
-  top: -5vh;
+  top: -2vh;
   display: flex;
   font-weight: bold;
   width: 100%;
   justify-content: center;
-  font-size: 20px;
+  font-size: 30px;
   color: white;
   font-style: italic;
 
   &:after {
     display: flex;
     content: "%";
-    font-size: 14px;
-    margin-top: 4px;
+    font-size: 16px;
+    margin-top: 14px;
     font-style: italic;
     position: relative;
+  }
+
+  @media only screen and (max-width: 767px) {
+    &:after {
+      font-size: 14px;
+      margin-top: 5px;
+    }
+    font-size: 20px;
+  }
+`;
+
+const Formula = styled.span`
+  position: absolute;
+  top: 200px;
+  width: 100%;
+  line-height: 24px;
+  margin: 0 auto;
+  color: rgba(255, 255, 255, 0.5);
+  @media only screen and (max-width: 767px) {
+    top: 250px;
   }
 `;
 
@@ -89,13 +109,16 @@ function App() {
 
   return (
     <AppWrapper currentHour={currentHour} className="App">
+      <Formula>
+        Using formula: <br /> `(1 - probabiltyOfSolveInHour ^ (currentIssues /
+        (workers * hoursLeft))) * 100`
+      </Formula>
       <InfoPanel>
         <EditableWeights
           fieldsDescriptor={currentDescriptor}
           onSubmitNewValues={setCurrentDescriptor}
         />
       </InfoPanel>
-
       <FallingRaindrops
         isRandomScaleFactor
         count={currentDescriptor.currentIssues}

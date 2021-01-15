@@ -1,8 +1,14 @@
 import styled, { keyframes } from "styled-components";
-import "./App.css";
-import { getBGColorGradientByTime } from "./utils";
 import { useEffect, useState } from "react";
-import SpeedoMeter from "./basicCompnents/SpeedoMeter/speedoMeter";
+import {
+  getBGColorGradientByTime,
+  getEstimatedPercentageToOrderPizza,
+} from "utils";
+import SpeedoMeter from "basicCompnents/SpeedoMeter/speedoMeter";
+import FallingRaindrops from "modules/raindrops/fallingRaindrops";
+import EditableWeights from "modules/editableForm/editableWeights";
+
+import "./App.css";
 
 const SpeedoMeterContainer = styled.div`
   display: flex;
@@ -10,6 +16,7 @@ const SpeedoMeterContainer = styled.div`
   align-items: center;
   position: absolute;
   bottom: 0;
+  width: 100%;
 `;
 
 const fadeHour = keyframes`
@@ -21,6 +28,7 @@ to {
 }`;
 const AppWrapper = styled.div`
   position: relative;
+  overflow: hidden;
   /* &:after {
     display: flex;
     content: "";
@@ -36,24 +44,75 @@ const AppWrapper = styled.div`
   ${getBGColorGradientByTime};
 `;
 
+const Info = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 50px;
+  align-items: center;
+  white-space: pre;
+  font-size: 20px;
+  color: white;
+`;
+
+const Percentage = styled.div`
+  position: absolute;
+  top: -5vh;
+  display: flex;
+  font-weight: bold;
+  width: 100%;
+  justify-content: center;
+  font-size: 20px;
+  color: white;
+  font-style: italic;
+
+  &:after {
+    display: flex;
+    content: "%";
+    font-size: 14px;
+    margin-top: 4px;
+    font-style: italic;
+    position: relative;
+  }
+`;
+
+const fieldsDescriptor = {
+  probabiltyOfSolveInHour: 0.75, // lets keep the probabilty 75%
+  currentIssues: 5, // single issue
+  workers: 2, // one worker - shouldnt affect result
+  hoursLeft: 1, // many hours for resolving it
+};
+
 function App() {
-  const [currentHour, setCurrentHour] = useState(new Date().getHours());
-  const [currentChance, setCurrentChance] = useState(0);
+  const [currentHour] = useState(new Date().getHours());
+
+  const [currentDescriptor, setCurrentDescriptor] = useState(fieldsDescriptor);
+  const [currentChance, setCurrentChance] = useState();
 
   useEffect(() => {
-    setCurrentChance(90);
-  }, []);
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     console.log("called");
-  //     setCurrentHour(new Date().getHours());
-  //   }, 5000);
-  //   return () => clearInterval(interval);
-  // }, []);
+    // const es = getEstimatedPercentageToOrderPizza(currentDescriptor);
+    // setCurrentChance(es);
+  }, [currentDescriptor, currentHour]);
+  console.log(currentDescriptor.currentIssues);
   return (
     <AppWrapper currentHour={currentHour} className="App">
+      <div style={{ position: "absolute" }}>
+        <FallingRaindrops
+          isRandomPosition
+          isRandomScaleFactor
+          count={currentDescriptor.currentIssues}
+        />
+      </div>
+      <Info>
+        <EditableWeights
+          fieldsDescriptor={fieldsDescriptor}
+          onSubmitNewValues={setCurrentDescriptor}
+        />
+      </Info>
+
       <SpeedoMeterContainer>
-        <SpeedoMeter value={currentChance} />
+        <Percentage>{currentChance}</Percentage>
+        <SpeedoMeter percentage={currentChance} />
       </SpeedoMeterContainer>
     </AppWrapper>
   );

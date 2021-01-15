@@ -57,7 +57,7 @@ const InfoPanel = styled.div`
 
 const Percentage = styled.div`
   position: absolute;
-  top: -2vh;
+  top: -4vh;
   display: flex;
   font-weight: bold;
   width: 100%;
@@ -76,6 +76,7 @@ const Percentage = styled.div`
   }
 
   @media only screen and (max-width: 767px) {
+    top: -3vh;
     &:after {
       font-size: 14px;
       margin-top: 5px;

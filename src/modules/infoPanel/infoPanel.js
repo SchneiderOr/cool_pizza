@@ -39,7 +39,7 @@ const Wrapper = styled.div`
   position: relative;
   display: flex;
   width: 100%;
-  height: 200px;
+  min-height: 200px;
   margin-top: 30px;
   align-items: center;
   white-space: pre;

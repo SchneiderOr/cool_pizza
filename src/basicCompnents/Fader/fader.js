@@ -10,6 +10,8 @@ to {
 `;
 
 const Fader = styled.div`
+  display: flex;
+  width: 100%;
   opacity: 0;
   ${({ duration, delay, timmingFunction, mode }) => css`
     animation: ${fadeIn} ${duration}s ${delay}s ${timmingFunction} ${mode};

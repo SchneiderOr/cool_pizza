@@ -163,11 +163,11 @@ export const getEstimatedPercentageToOrderPizza = ({
   probabiltyOfSolveInHour = 1,
   currentIssues,
   workers = 1,
-  hoursLeft,
+  minutesLeft,
 }) => {
   const parser = new Parser();
   const p = parser.parse(
-    `(1 - probabiltyOfSolveInHour ^ (currentIssues / (workers * hoursLeft))) * 100`
+    `(1 - probabiltyOfSolveInHour ^ (currentIssues / (workers * minutesLeft))) * 100`
   );
 
   return Math.max(
@@ -177,18 +177,18 @@ export const getEstimatedPercentageToOrderPizza = ({
         probabiltyOfSolveInHour,
         currentIssues,
         workers,
-        hoursLeft,
+        minutesLeft: minutesLeft / 60,
       })
     )
   );
   // return (
-  //   1 - probabiltyOfSolveInHour ** (currentIssues / (workers * hoursLeft)) * 100
-  //   // 1 - probabiltyOfSolveInHour ** (currentIssues / (workers * hoursLeft)) * 100
+  //   1 - probabiltyOfSolveInHour ** (currentIssues / (workers * minutesLeft)) * 100
+  //   // 1 - probabiltyOfSolveInHour ** (currentIssues / (workers * minutesLeft)) * 100
   // );
 
   // return Math.pow(
   //   probabiltyOfSolveInHour,
-  //   currentIssues / (workers * hoursLeft)
+  //   currentIssues / (workers * minutesLeft)
   // );
 };
 
@@ -200,3 +200,16 @@ export const getRandomPositionAndScale = memoize(() => {
     scale: [...Array(99)].map(() => Math.random() * (1.5 - 0.5) + 0.5),
   };
 });
+
+export const getDateTimeMetricies = (date) => {
+  const now = date || new Date();
+  const releaseDateTime = new Date();
+  releaseDateTime.setHours(17, 0, 0); // Set hours, minutes and seconds
+  const milliseconds = releaseDateTime - now; // milliseconds between now & Christmas
+  return {
+    minutesUntilEOD: Math.max(0, Math.floor(milliseconds / 1000 / 60)),
+    currentHour: now.getHours(),
+    isDayTime: now.getHours() > 6 && now.getHours() < 20,
+    isReleaseDay: now.getDay() === 0,
+  };
+};

@@ -1,15 +1,21 @@
 import styled, { css } from "styled-components";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-const hours = new Date().getHours();
-const isDayTime = hours > 6 && hours < 20;
-
+const isDayTime = true;
 const colors = {
   white: "255, 255, 255",
   black: "0, 0, 0",
 };
+
 const Wrapper = styled.div`
   position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  white-space: pre;
+  color: white;
+
   ${({ isVisible }) =>
     css`
       transform: translateY(${isVisible ? 0 : "-135px"});
@@ -29,7 +35,7 @@ const Wrapper = styled.div`
   }
 `;
 
-const EditableFormContainer = styled.div`
+const FormContainer = styled.div`
   display: flex;
   margin-bottom: 10px;
   flex-wrap: wrap;
@@ -87,8 +93,13 @@ const Input = styled.input`
   ${fieldAndButtonStyle};
 `;
 
+const ButtonsWrapper = styled.div`
+  display: flex;
+`;
+
 const Button = styled.button`
   ${fieldAndButtonStyle};
+
   margin-bottom: 10px;
   cursor: pointer;
   &:focus {
@@ -157,7 +168,6 @@ const MenuButton = styled.button`
     justify-content: center;
     display: flex;
     border-radius: 20px;
-    /* background: rgba(${isDayTime ? colors.black : colors.white}, 0.75); */
     width: 25px;
     height: 15px;
     color: white;
@@ -176,12 +186,21 @@ const MenuButton = styled.button`
 `;
 
 const EditableWeights = ({
+  isDayTime,
   fieldsDescriptor,
   onSubmitNewValues,
-  isInitiallyVisible = true,
+  onRefetchRequest,
 }) => {
   const formRefs = useRef({}).current;
-  const [isVisible, setVisible] = useState(isInitiallyVisible);
+  const [isVisible, setVisible] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setVisible(true);
+    }, 1000);
+  }, []);
+
+  // Use uncontrolled so we collect all the values genericly instead of implemeting functionality
   const handleSubmitClick = () => {
     const mappedValues = Object.keys(formRefs).reduce((acc, current) => {
       acc[current] = formRefs[current].value;
@@ -190,30 +209,33 @@ const EditableWeights = ({
     onSubmitNewValues(mappedValues);
   };
 
+  const formFields = Object.keys(fieldsDescriptor).map((key) => {
+    return (
+      <View
+        key={`${fieldsDescriptor.currentIssues}-${fieldsDescriptor.minutesLeft}-${key}-view`}
+      >
+        <Label>{key}</Label>
+        <Input
+          ref={(ref) => (formRefs[key] = ref)}
+          type="text"
+          step="0.1"
+          min="0"
+          max="100"
+          name={key}
+          defaultValue={fieldsDescriptor[key]}
+          autoComplete="off"
+        />
+      </View>
+    );
+  });
+
   return (
     <Wrapper isVisible={isVisible}>
-      <EditableFormContainer>
-        {Object.keys(fieldsDescriptor).map((key) => {
-          return (
-            <View key={`${key}-view`}>
-              <Label key={`${key}-label`}>{key}</Label>
-              <Input
-                key={key}
-                ref={(ref) => (formRefs[key] = ref)}
-                type="text"
-                step="0.1"
-                min="0"
-                max="100"
-                name={key}
-                defaultValue={fieldsDescriptor[key]}
-                autoComplete="off"
-              />
-            </View>
-          );
-        })}
-      </EditableFormContainer>
-
-      <Button onClick={handleSubmitClick}>Calculate Chances</Button>
+      <FormContainer>{formFields}</FormContainer>
+      <ButtonsWrapper>
+        <Button onClick={handleSubmitClick}>Calculate Chances</Button>
+        <Button onClick={onRefetchRequest}>Fetch New Random Issues</Button>
+      </ButtonsWrapper>
       <MenuButton isVisible={isVisible} onClick={() => setVisible(!isVisible)}>
         <img alt="menu-arrow" src="arrow-up.png" />
       </MenuButton>

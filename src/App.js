@@ -1,15 +1,11 @@
-import styled, { keyframes } from "styled-components";
-import { useEffect, useState } from "react";
-import {
-  getBGColorGradientByTime,
-  getEstimatedPercentageToOrderPizza,
-} from "utils";
+import styled from "styled-components";
+import { getBGColorGradientByTime } from "utils";
 import SpeedoMeter from "basicCompnents/SpeedoMeter/speedoMeter";
 import FallingRaindrops from "modules/raindrops/fallingRaindrops";
-import EditableWeights from "modules/editableForm/editableWeights";
+import InfoPanel from "modules/infoPanel/infoPanel";
+import useAppValues from "hooks/useAppValues";
 
 import "./App.css";
-import { ALGORITHEM_DEFAULTS } from "config/constants";
 
 const SpeedoMeterContainer = styled.div`
   display: flex;
@@ -20,41 +16,13 @@ const SpeedoMeterContainer = styled.div`
   width: 100%;
 `;
 
-const fadeHour = keyframes`
-from {
-  opacity:0;
-} 
-to {
-  opacity:1
-}`;
 const AppWrapper = styled.div`
   position: relative;
   overflow: hidden;
   text-align: center;
   display: flex;
   overflow: hidden;
-  /* &:after {
-    display: flex;
-    content: "";
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0;
-    ${({ currentHour }) =>
-    getBGColorGradientByTime({ currentHour: currentHour + 1 })};
-    animation: ${fadeHour} 3s linear;
-  } */
   ${getBGColorGradientByTime};
-`;
-
-const InfoPanel = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  align-items: center;
-  white-space: pre;
-  color: white;
 `;
 
 const Percentage = styled.div`
@@ -121,37 +89,38 @@ const Formula = styled.span`
 `;
 
 function App() {
-  const [currentHour] = useState(new Date().getHours());
-  const [currentDescriptor, setCurrentDescriptor] = useState(
-    ALGORITHEM_DEFAULTS
-  );
-  const [currentChance, setCurrentChance] = useState(0);
-
-  useEffect(() => {
-    setCurrentChance(getEstimatedPercentageToOrderPizza(currentDescriptor));
-  }, [currentDescriptor]);
-
+  const {
+    currentIssues,
+    currentDateTimeData,
+    currentChance,
+    currentAlgorithemDescriptor,
+    setAlgorithemFieldsValues,
+    fetchRandomNumberAndUpdateDescriptor,
+  } = useAppValues();
   return (
-    <AppWrapper currentHour={currentHour} className="App">
+    <AppWrapper currentHour={currentDateTimeData.currentHour} className="App">
       <Formula>
         Using formula: <br />
         <pre>
           <code>
-            {`(1 - probabiltyOfSolveInHour ^ (currentIssues / (workers *
-            hoursLeft))) * 100`}
+            {`(1 - probabiltyOfSolveInHour ^ (currentIssues / (workers * minutesLeft))) * 100`}
           </code>
         </pre>
       </Formula>
-      <InfoPanel>
-        <EditableWeights
-          fieldsDescriptor={currentDescriptor}
-          onSubmitNewValues={setCurrentDescriptor}
-        />
-      </InfoPanel>
+
       <FallingRaindrops
         isRandomScaleFactor
-        count={currentDescriptor.currentIssues}
+        count={currentAlgorithemDescriptor.currentIssues || 0}
       />
+
+      {currentIssues != null && (
+        <InfoPanel
+          isDayTime={currentDateTimeData.isDayTime}
+          fieldsDescriptor={currentAlgorithemDescriptor}
+          onSubmitNewValues={setAlgorithemFieldsValues}
+          onRefetchRequest={fetchRandomNumberAndUpdateDescriptor}
+        />
+      )}
 
       <SpeedoMeterContainer>
         <Percentage>{currentChance}</Percentage>

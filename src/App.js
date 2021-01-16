@@ -97,6 +97,7 @@ function App() {
     setAlgorithemFieldsValues,
     fetchRandomNumberAndUpdateDescriptor,
   } = useAppValues();
+
   return (
     <AppWrapper currentHour={currentDateTimeData.currentHour} className="App">
       <Formula>

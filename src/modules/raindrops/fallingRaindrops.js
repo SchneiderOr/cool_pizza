@@ -13,6 +13,10 @@ to {
   }
 `;
 
+const Container = styled.div`
+  position: absolute;
+`;
+
 const RaindropWrapper = styled.div.attrs((props) => {
   const { positionDescriptor, index } = props;
   const { top, left } = positionDescriptor;
@@ -32,12 +36,13 @@ const FallingRaindrops = ({
   maxScale,
   isRandomScaleFactor,
 }) => {
-  return Array.from({ length: count }).map((_, index) => {
+  const raindropsContent = Array.from({ length: count }).map((_, index) => {
     const positionDescriptor = getRandomPositionAndScale();
     const randomFadeInDelay = getRandomFloatBetweenRange({
       min: 0.25,
       max: 1.25,
     });
+
     return (
       <Fader key={`fader-${index}`} delay={randomFadeInDelay}>
         <RaindropWrapper
@@ -50,6 +55,7 @@ const FallingRaindrops = ({
       </Fader>
     );
   });
+  return <Container>{raindropsContent}</Container>;
 };
 
 export default FallingRaindrops;

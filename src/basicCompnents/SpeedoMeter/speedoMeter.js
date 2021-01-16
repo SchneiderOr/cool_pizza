@@ -1,9 +1,5 @@
 import styled, { css } from "styled-components";
-
-const mapPercentageToDegrees = (value) => {
-  const maxDegree = 180;
-  return (value * maxDegree) / 100;
-};
+import { mapPercentageToDegrees } from "utils";
 
 const SpeedoMeterWrapper = styled.div`
   position: relative;
@@ -33,11 +29,8 @@ const Needle = styled.div`
   display: flex;
   align-items: center;
   position: relative;
-  content: "";
-  min-width: 300px;
-  min-height: 15px;
-  width: 15vw;
-  height: 0.75vw;
+  width: 300px;
+  height: 15px;
   border-radius: 100% 0 0 100%;
   background-color: rgba(255, 255, 255, 0.75);
   filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.95));
@@ -50,7 +43,7 @@ const Needle = styled.div`
 
   @media only screen and (max-width: 767px) {
     min-width: auto;
-    min-height: auto;
+    min-height: 12px;
     width: 35vw;
     height: 1.5vw;
   }
@@ -58,20 +51,15 @@ const Needle = styled.div`
 
 const Circle = styled.span`
   position: absolute;
-  left: calc(50% - 0.75vw);
-  bottom: -0.5vw;
-  width: 1.5vw;
-  height: 1.5vw;
+  left: calc(50% - 12px);
+  bottom: -8px;
+  width: 25px;
+  height: 25px;
   background-color: rgba(255, 255, 255, 1);
   border-radius: 50%;
   filter: drop-shadow(0px 0 3px rgba(0, 0, 0, 0.5));
-  @media only screen and (max-width: 767px) {
-    left: calc(50% - 0.75vw);
-    bottom: -1vw;
-    width: 2.5vw;
-    height: 2.5vw;
-  }
 `;
+
 const SpeedoMeter = ({ percentage }) => {
   return (
     <SpeedoMeterWrapper>

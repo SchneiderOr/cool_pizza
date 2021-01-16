@@ -5,7 +5,7 @@ import {
   getDateTimeMetricies,
   getEstimatedPercentageToOrderPizza,
 } from "utils";
-import { first, get } from "lodash";
+import { debounce, first, get } from "lodash";
 
 const useAppValues = (props) => {
   const [currentAlgorithemDescriptor, setAlgorithemFieldsValues] = useState({});
@@ -67,8 +67,11 @@ const useAppValues = (props) => {
     currentDateTimeData,
     currentChance,
     currentAlgorithemDescriptor,
-    setAlgorithemFieldsValues,
-    fetchRandomNumberAndUpdateDescriptor,
+    setAlgorithemFieldsValues: debounce(setAlgorithemFieldsValues, 500),
+    fetchRandomNumberAndUpdateDescriptor: debounce(
+      fetchRandomNumberAndUpdateDescriptor,
+      500
+    ),
   };
 };
 

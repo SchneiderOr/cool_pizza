@@ -6,6 +6,7 @@ import InfoPanel from "modules/infoPanel/infoPanel";
 import useAppValues from "hooks/useAppValues";
 
 import "./App.css";
+import Fader from "basicCompnents/Fader/fader";
 
 const SpeedoMeterContainer = styled.div`
   display: flex;
@@ -21,13 +22,14 @@ const AppWrapper = styled.div`
   overflow: hidden;
   text-align: center;
   display: flex;
+  flex-direction: column;
   overflow: hidden;
   ${getBGColorGradientByTime};
 `;
 
-const Percentage = styled.div`
+const FaderPercentage = styled(Fader)`
   position: absolute;
-  top: -4vh;
+  top: -2vh;
   display: flex;
   font-weight: bold;
   width: 100%;
@@ -46,45 +48,11 @@ const Percentage = styled.div`
   }
 
   @media only screen and (max-width: 767px) {
-    top: -3vh;
     &:after {
       font-size: 14px;
       margin-top: 5px;
     }
     font-size: 20px;
-  }
-`;
-
-const Formula = styled.span`
-  position: absolute;
-  top: 200px;
-  width: 100%;
-
-  line-height: 20px;
-  font-size: 16px;
-  margin: 0 auto;
-  color: rgba(255, 255, 255, 0.5);
-
-  code {
-    white-space: nowrap;
-  }
-
-  @media only screen and (max-width: 767px) {
-    code {
-      white-space: pre-line;
-    }
-    top: 250px;
-  }
-
-  @media only screen and (max-width: 500px) {
-    line-height: 16px;
-    font-size: 12px;
-    top: 60%;
-
-    letter-spacing: 1px;
-    code {
-      white-space: pre-line;
-    }
   }
 `;
 
@@ -98,25 +66,16 @@ function App() {
     fetchRandomNumberAndUpdateDescriptor,
   } = useAppValues();
 
+  const { currentHour, isDayTime } = currentDateTimeData;
   return (
-    <AppWrapper currentHour={currentDateTimeData.currentHour} className="App">
-      <Formula>
-        Using formula: <br />
-        <pre>
-          <code>
-            {`(1 - probabiltyOfSolveInHour ^ (currentIssues / (workers * minutesLeft))) * 100`}
-          </code>
-        </pre>
-      </Formula>
-
+    <AppWrapper currentHour={currentHour} className="App">
       <FallingRaindrops
         isRandomScaleFactor
         count={currentAlgorithemDescriptor.currentIssues || 0}
       />
-
       {currentIssues != null && (
         <InfoPanel
-          isDayTime={currentDateTimeData.isDayTime}
+          isDayTime={isDayTime}
           fieldsDescriptor={currentAlgorithemDescriptor}
           onSubmitNewValues={setAlgorithemFieldsValues}
           onRefetchRequest={fetchRandomNumberAndUpdateDescriptor}
@@ -124,7 +83,8 @@ function App() {
       )}
 
       <SpeedoMeterContainer>
-        <Percentage>{currentChance}</Percentage>
+        <FaderPercentage delay={3}>{currentChance}</FaderPercentage>
+
         <SpeedoMeter percentage={currentChance} />
       </SpeedoMeterContainer>
     </AppWrapper>

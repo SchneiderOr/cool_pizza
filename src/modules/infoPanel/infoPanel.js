@@ -46,7 +46,7 @@ const Wrapper = styled.div`
   color: white;
   flex-direction: column;
   user-select: none;
-  transition: transform 1s cubic-bezier(0.9, 1.8, 0.21, 0.8);
+  transition: transform 1s 1s cubic-bezier(0.9, 1.5, 0.24, 1);
   ${({ isVisible }) =>
     css`
       transform: translateY(${isVisible ? 0 : "-140px"});
@@ -58,7 +58,7 @@ const Wrapper = styled.div`
     margin-left: auto;
     ${({ isVisible }) =>
       css`
-        transform: translateY(${isVisible ? 0 : "-190px"});
+        transform: translateY(${isVisible ? 0 : "-195px"});
       `};
   }
 `;
@@ -113,8 +113,9 @@ const MenuButton = styled.button`
   justify-content: center;
   display: flex;
   align-self: center;
-  height: 25px;
-  border-radius: 50px;
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 5px 10px;
   ${({ isDayTime }) => {
     return css`
       background: rgba(
@@ -126,7 +127,6 @@ const MenuButton = styled.button`
           ${isDayTime ? colors.black : colors.white},
           ${isDayTime ? 0.125 : 0.25}
         );
-      cursor: pointer;
       &:focus {
         background: rgba(
           ${isDayTime ? colors.black : colors.white},
@@ -146,22 +146,13 @@ const MenuButton = styled.button`
         border-color: rgba(${isDayTime ? colors.black : colors.white}, 0.5);
       }
 
-      &:before {
-        position: absolute;
-        content: "";
-        align-items: center;
-        justify-content: center;
-        display: flex;
-        border-radius: 20px;
-        width: 25px;
-        height: 15px;
-        color: white;
-      }
-
       img {
         width: 25px;
         height: 15px;
         filter: brightness(${isDayTime ? 3 : 0.75});
+        transform: translateZ(0px);
+        outline: none;
+        border: none;
         transition: transform 0.5s 0.5s linear;
         ${({ isVisible }) =>
           css`

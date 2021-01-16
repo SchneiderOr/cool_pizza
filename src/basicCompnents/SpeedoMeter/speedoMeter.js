@@ -1,27 +1,56 @@
+import Fader from "basicCompnents/Fader/fader";
 import styled, { css } from "styled-components";
 import { mapPercentageToDegrees } from "utils";
 
+const breakpoints = {
+  desktop: {
+    speedoMeter: css`
+      width: 50vw;
+      height: 25vw;
+      min-width: 300px;
+      min-height: 150px;
+      max-width: 600px;
+      max-height: 300px;
+    `,
+    needle: css`
+      width: 25vw;
+      height: 1vw;
+      min-width: 150px;
+      min-height: 12px;
+      max-width: 300px;
+      max-height: 15px;
+    `,
+  },
+  landscape: {
+    speedoMeter: css`
+      width: 25vw;
+      height: 12.5vw;
+      min-width: 150px;
+      min-height: 76px;
+      max-width: 300px;
+      max-height: 150px;
+    `,
+    needle: css`
+      width: 12.5vw;
+      height: 0.5vw;
+      min-width: 75px;
+      min-height: 12px;
+      max-width: 150px;
+      max-height: 15px;
+    `,
+  },
+};
 const SpeedoMeterWrapper = styled.div`
   position: relative;
   display: flex;
   align-items: flex-end;
-  min-width: 600px;
-  min-height: 300px;
-  width: 30vw;
-  height: 15vw;
-  border-top-left-radius: 15vw;
-  border-top-right-radius: 15vw;
   background-image: url("pizza.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  @media only screen and (max-width: 767px) {
-    min-width: auto;
-    min-height: auto;
-    width: 70vw;
-    height: 35vw;
-    border-top-left-radius: 25vw;
-    border-top-right-radius: 25vw;
+  ${breakpoints.desktop.speedoMeter};
+  @media only screen and (max-height: 600px) {
+    ${breakpoints.landscape.speedoMeter};
   }
 `;
 
@@ -29,8 +58,6 @@ const Needle = styled.div`
   display: flex;
   align-items: center;
   position: relative;
-  width: 300px;
-  height: 15px;
   border-radius: 100% 0 0 100%;
   background-color: rgba(255, 255, 255, 0.75);
   filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.95));
@@ -41,11 +68,9 @@ const Needle = styled.div`
     `}
   transform-origin: right;
 
-  @media only screen and (max-width: 767px) {
-    min-width: auto;
-    min-height: 12px;
-    width: 35vw;
-    height: 1.5vw;
+  ${breakpoints.desktop.needle};
+  @media only screen and (max-height: 600px) {
+    ${breakpoints.landscape.needle};
   }
 `;
 
@@ -60,9 +85,39 @@ const Circle = styled.span`
   filter: drop-shadow(0px 0 3px rgba(0, 0, 0, 0.5));
 `;
 
+const FaderPercentage = styled(Fader)`
+  position: absolute;
+  top: -25px;
+  display: flex;
+  font-weight: bold;
+  width: 100%;
+  justify-content: center;
+  font-size: 30px;
+  color: white;
+  font-style: italic;
+
+  &:after {
+    display: flex;
+    content: "%";
+    font-size: 16px;
+    margin-top: 14px;
+    font-style: italic;
+    position: relative;
+  }
+
+  @media only screen and (max-width: 767px) {
+    &:after {
+      font-size: 13px;
+      margin-top: 5px;
+    }
+    font-size: 20px;
+  }
+`;
+
 const SpeedoMeter = ({ percentage }) => {
   return (
     <SpeedoMeterWrapper>
+      <FaderPercentage delay={3}>{percentage}</FaderPercentage>
       <Needle percentage={percentage} />
       <Circle />
     </SpeedoMeterWrapper>

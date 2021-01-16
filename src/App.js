@@ -6,7 +6,6 @@ import InfoPanel from "modules/infoPanel/infoPanel";
 import useAppValues from "hooks/useAppValues";
 
 import "./App.css";
-import Fader from "basicCompnents/Fader/fader";
 
 const SpeedoMeterContainer = styled.div`
   display: flex;
@@ -27,35 +26,6 @@ const AppWrapper = styled.div`
   ${getBGColorGradientByTime};
 `;
 
-const FaderPercentage = styled(Fader)`
-  position: absolute;
-  top: -2vh;
-  display: flex;
-  font-weight: bold;
-  width: 100%;
-  justify-content: center;
-  font-size: 30px;
-  color: white;
-  font-style: italic;
-
-  &:after {
-    display: flex;
-    content: "%";
-    font-size: 16px;
-    margin-top: 14px;
-    font-style: italic;
-    position: relative;
-  }
-
-  @media only screen and (max-width: 767px) {
-    &:after {
-      font-size: 14px;
-      margin-top: 5px;
-    }
-    font-size: 20px;
-  }
-`;
-
 function App() {
   const {
     currentIssues,
@@ -70,7 +40,6 @@ function App() {
   return (
     <AppWrapper currentHour={currentHour} className="App">
       <FallingRaindrops
-        isRandomScaleFactor
         count={currentAlgorithemDescriptor.currentIssues || 0}
       />
       {currentIssues != null && (
@@ -83,8 +52,6 @@ function App() {
       )}
 
       <SpeedoMeterContainer>
-        <FaderPercentage delay={3}>{currentChance}</FaderPercentage>
-
         <SpeedoMeter percentage={currentChance} />
       </SpeedoMeterContainer>
     </AppWrapper>

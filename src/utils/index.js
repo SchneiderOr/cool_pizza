@@ -174,7 +174,7 @@ export const getEstimatedPercentageToOrderPizza = ({
   );
 };
 
-// This is using React.useMemo meaning that this will be calculated only once, or only if the count is bigger then the one passed
+// We memozie this so it will be calculated only once
 export const getRandomPositionAndScale = memoize(() => {
   return {
     top: shuffle(keys([...Array(100)])),
@@ -186,8 +186,8 @@ export const getRandomPositionAndScale = memoize(() => {
 export const getDateTimeMetricies = (date) => {
   const now = date || new Date();
   const releaseDateTime = new Date();
-  releaseDateTime.setHours(17, 0, 0); // Set hours, minutes and seconds
-  const milliseconds = releaseDateTime - now; // milliseconds between now & Christmas
+  releaseDateTime.setHours(17, 0, 0);
+  const milliseconds = releaseDateTime - now;
   return {
     minutesUntilEOD: Math.max(0, Math.floor(milliseconds / 1000 / 60)),
     currentHour: now.getHours(),

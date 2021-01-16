@@ -3,7 +3,7 @@ import { colors } from "config/constants";
 
 const Wrapper = styled.div`
   width: 100%;
-  line-height: 20px;
+  line-height: 1.6;
   font-size: 16px;
   margin: 20px auto 0;
   ${({ isDayTime }) => css`
@@ -11,25 +11,17 @@ const Wrapper = styled.div`
   `}
 
   code {
-    white-space: nowrap;
+    white-space: pre-line;
   }
 
-  @media only screen and (max-width: 767px) {
-    code {
-      white-space: pre-line;
-    }
-    top: 250px;
-  }
-
-  @media only screen and (max-width: 500px) {
-    line-height: 16px;
+  @media only screen and (max-height: 600px) {
+    margin: 15px auto 0;
     font-size: 12px;
-    top: 60%;
+    line-height: 1;
+  }
 
-    letter-spacing: 1px;
-    code {
-      white-space: pre-line;
-    }
+  @media only screen and (max-height: 374px) {
+    display: none;
   }
 `;
 

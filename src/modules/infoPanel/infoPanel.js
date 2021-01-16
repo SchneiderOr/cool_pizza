@@ -49,7 +49,7 @@ const Wrapper = styled.div`
   transition: transform 1s cubic-bezier(0.9, 1.8, 0.21, 0.8);
   ${({ isVisible }) =>
     css`
-      transform: translateY(${isVisible ? 0 : "-135px"});
+      transform: translateY(${isVisible ? 0 : "-140px"});
     `};
   @media only screen and (max-width: 767px) {
     width: 90%;
@@ -58,7 +58,7 @@ const Wrapper = styled.div`
     margin-left: auto;
     ${({ isVisible }) =>
       css`
-        transform: translateY(${isVisible ? 0 : "-185px"});
+        transform: translateY(${isVisible ? 0 : "-190px"});
       `};
   }
 `;
@@ -216,7 +216,7 @@ const InfoPanel = ({
       </FormField>
     );
   });
-  console.log(isDayTime);
+
   return (
     <Wrapper isVisible={isVisible}>
       <FormContainer>{formFields}</FormContainer>

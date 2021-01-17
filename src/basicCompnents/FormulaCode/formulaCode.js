@@ -2,6 +2,8 @@ import styled, { css } from "styled-components";
 import { colors } from "config/constants";
 
 const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 100%;
   line-height: 1.6;
   font-size: 16px;
@@ -27,7 +29,7 @@ const Wrapper = styled.div`
 
 const FormulaCode = ({ isDayTime, children }) => (
   <Wrapper isDayTime={isDayTime}>
-    Using formula: <br />
+    Using formula:
     <pre>
       <code>{children}</code>
     </pre>

@@ -1,60 +1,48 @@
-import styled from "styled-components";
-import { getBGColorGradientByTime } from "utils";
-import SpeedoMeter from "basicCompnents/SpeedoMeter/speedoMeter";
-import FallingRaindrops from "modules/raindrops/fallingRaindrops";
+import { useEffect } from "react";
+
+import ChangingBackgroundWrapper from "modules/changingBackground/changingBackground";
+import SpeedoMeter from "modules/speedometer/speedometer";
+import Raindrops from "modules/raindrops/raindrops";
 import InfoPanel from "modules/infoPanel/infoPanel";
-import useAppValues from "hooks/useAppValues";
+import useForecastAlgorithm from "hooks/useAlgorithm";
+import useDateTimeMetricies from "hooks/useDateTimeMetricies";
 
 import "./App.css";
 
-const SpeedoMeterContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-`;
-
-const AppWrapper = styled.div`
-  position: relative;
-  overflow: hidden;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  ${getBGColorGradientByTime};
-`;
-
 function App() {
+  const { currentHour, minutesUntilEOD, isDayTime } = useDateTimeMetricies();
   const {
-    currentIssues,
-    currentDateTimeData,
     currentChance,
-    currentAlgorithemDescriptor,
+    algorithmDescriptor,
     setAlgorithemFieldsValues,
-    fetchRandomNumberAndUpdateDescriptor,
-  } = useAppValues();
+    fetchDataAndUpdateView,
+  } = useForecastAlgorithm();
+  const { currentIssues } = algorithmDescriptor;
 
-  const { currentHour, isDayTime } = currentDateTimeData;
+  useEffect(() => {
+    // In case minutes passed by or minutes changed -> recalc the algorithm
+    if (algorithmDescriptor.minutesLeft !== minutesUntilEOD) {
+      setAlgorithemFieldsValues({
+        ...algorithmDescriptor,
+        minutesLeft: minutesUntilEOD,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [minutesUntilEOD, algorithmDescriptor]);
+
   return (
-    <AppWrapper currentHour={currentHour} className="App">
-      <FallingRaindrops
-        count={currentAlgorithemDescriptor.currentIssues || 0}
-      />
+    <ChangingBackgroundWrapper currentHour={currentHour} className="App">
+      <Raindrops fallingAnimation={false} count={currentIssues} />
       {currentIssues != null && (
         <InfoPanel
           isDayTime={isDayTime}
-          fieldsDescriptor={currentAlgorithemDescriptor}
+          fieldsDescriptor={algorithmDescriptor}
           onSubmitNewValues={setAlgorithemFieldsValues}
-          onRefetchRequest={fetchRandomNumberAndUpdateDescriptor}
+          onRefetchRequest={fetchDataAndUpdateView}
         />
       )}
-
-      <SpeedoMeterContainer>
-        <SpeedoMeter percentage={currentChance} />
-      </SpeedoMeterContainer>
-    </AppWrapper>
+      <SpeedoMeter percentage={currentChance} />
+    </ChangingBackgroundWrapper>
   );
 }
 

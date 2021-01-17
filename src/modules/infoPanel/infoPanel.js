@@ -1,11 +1,15 @@
-import styled, { css } from "styled-components";
 import { useEffect, useRef, useState } from "react";
+import styled, { css } from "styled-components";
+
 import FormulaCode from "basicCompnents/FormulaCode/formulaCode";
 import Fader from "basicCompnents/Fader/fader";
-import { colors } from "config/constants";
+import { ALGORITHEM_FORMULA, disabledFields, colors } from "config/constants";
 
-const fieldAndButtonStyle = ({ isDayTime }) => {
+const fieldAndButtonStyle = ({ disabled, isDayTime }) => {
   return css`
+    pointer-events: ${disabled ? "none" : "all"};
+    opacity: ${disabled ? 0.5 : 1};
+
     background: rgba(
       ${isDayTime ? colors.black : colors.white},
       ${isDayTime ? 0.25 : 0.125}
@@ -173,9 +177,7 @@ const InfoPanel = ({
   const [isVisible, setVisible] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => {
-      setVisible(true);
-    }, 1000);
+    setVisible(true);
   }, []);
 
   // Use uncontrolled so we collect all the values genericly instead of implemeting functionality
@@ -201,6 +203,7 @@ const InfoPanel = ({
           max="100"
           name={key}
           defaultValue={fieldsDescriptor[key]}
+          disabled={disabledFields[key]}
           autoComplete="off"
           isDayTime={isDayTime}
         />
@@ -227,10 +230,8 @@ const InfoPanel = ({
         <img alt="menu-arrow" src="arrow-up.png" />
       </MenuButton>
       {isVisible && (
-        <Fader>
-          <FormulaCode isDayTime={isDayTime}>
-            {`(1 - probabiltyOfSolveInHour ^ (currentIssues / (workers * minutesLeft))) * 100`}
-          </FormulaCode>
+        <Fader delay={3}>
+          <FormulaCode isDayTime={isDayTime}>{ALGORITHEM_FORMULA}</FormulaCode>
         </Fader>
       )}
     </Wrapper>

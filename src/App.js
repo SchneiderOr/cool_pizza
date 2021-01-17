@@ -32,7 +32,7 @@ function App() {
 
   return (
     <ChangingBackgroundWrapper currentHour={currentHour} className="App">
-      <Raindrops fallingAnimation={false} count={currentIssues} />
+      <Raindrops fallingAnimation={currentIssues < 50} count={currentIssues} />
       {currentIssues != null && (
         <InfoPanel
           isDayTime={isDayTime}

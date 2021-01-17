@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { fetchNumberOfIssues } from "services/apiClient";
 import { debounce } from "lodash";
 import { getEstimatedPercentageToOrderPizza } from "utils";
+import { fetchNumberOfIssues } from "services/apiClient";
 
 /**
  * I have decided to encapsulate all the business logic about how we retrive num of issues, calculating the forecast and handling timming in here
